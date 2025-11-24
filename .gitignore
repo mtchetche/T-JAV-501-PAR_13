@@ -1,0 +1,33 @@
+# Java build output
+/out/
+/build/
+/bin/
+/target/
+*.class
+
+# IDE / editor
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.gradle/
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+**/.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Local JDK / downloads (keeps repo light)
+/lib/jdk*/
+/lib/jdk*.zip

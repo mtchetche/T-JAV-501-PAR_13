@@ -1,0 +1,75 @@
+Tests unitaires (JUnit 5)
+------------------------
+
+Pré-requis
+- JDK 17+ présent, ou celui fourni dans `lib/jdk-17.0.17+10` (Windows).
+- JAR JUnit déjà téléchargé : `lib/junit-platform-console-standalone-1.10.2.jar`.
+
+Compilation + exécution rapide (Windows PowerShell)
+```
+Remove-Item -Recurse -Force out -ErrorAction SilentlyContinue
+$cp = "lib/junit-platform-console-standalone-1.10.2.jar"
+javac -d out -cp "$cp;src" (Get-ChildItem src -Recurse -Filter *.java).FullName (Get-ChildItem test -Recurse -Filter *.java).FullName
+java -jar $cp -cp "out;src" --scan-class-path
+```
+
+Détail des 9 tests (1 ligne chacun)
+- `InventoryTest.addStopsWhenFull` : refuse un 4e ajout quand la capacité est 3 en testant la taille et le retour false.
+- `InventoryTest.consumeFirstOfTypeRemovesOnlyThatType` : retire le premier item du type demandé et laisse les autres intacts (compte et taille vérifiés).
+- `InventoryTest.consumeNextItemIsFifo` : vérifie l’ordre FIFO et le retour null quand l’inventaire est vide.
+- `TimeFreezeManagerTest.timeFreezeDeactivatesAfterDuration` : un gel activé 5 s redevient inactif après mises à jour cumulées.
+- `WaveAndWaveManagerTest.waveFinishesAfterDuration` : une vague se termine après sa durée et le temps restant tombe à 0.
+- `WaveAndWaveManagerTest.waveManagerCapsAtThree` : l’index de vague ne dépasse jamais 3 après plusieurs `goToNextWave`.
+- `Ak47BulletTest.ak47BulletDiesOutsideScreen` : une balle placée hors écran devient inactive après `update`.
+- `ItemPickupTest.itemTimerExpiresAfter20Seconds` : un TIMER se désactive après 20 s d’updates cumulées.
+- `BulletCollisionTest.bulletDiesOnPlatformCollision` : un projectile ennemi placé sur une plateforme est détruit lors de l’update de collision décor.
+
+Guide pas à pas (Windows et macOS)
+----------------------------------
+
+0) Se placer dans la racine du projet (le dossier contenant `readme`).
+
+1) Installer ou pointer le JDK 17
+- Windows : JDK fourni dans `lib/jdk-17.0.17+10` (déjà téléchargé).
+- macOS : installer un JDK 17 (Adoptium/Oracle/Homebrew) ou réutiliser un JDK 17 existant (`java -version` pour vérifier).
+
+2) Mettre le JDK dans le PATH pour la session
+- Windows PowerShell :
+  ```
+  $env:PATH = "$(Resolve-Path lib/jdk-17.0.17+10/bin);$env:PATH"
+  ```
+  (remplacer par votre chemin JDK si autre installation)
+- macOS bash/zsh :
+  ```
+  export PATH="/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin:$PATH"
+  ```
+  (adapter au chemin de votre JDK ; `which java` doit pointer vers le JDK 17)
+
+3) Compiler sources + tests
+- Windows PowerShell :
+  ```
+  Remove-Item -Recurse -Force out -ErrorAction SilentlyContinue
+  $cp = "lib/junit-platform-console-standalone-1.10.2.jar"
+  javac -d out -cp "$cp;src" (Get-ChildItem src -Recurse -Filter *.java).FullName (Get-ChildItem test -Recurse -Filter *.java).FullName
+  ```
+- macOS bash/zsh :
+  ```
+  rm -rf out
+  cp="lib/junit-platform-console-standalone-1.10.2.jar"
+  javac -d out -cp "$cp:src" $(find src -name "*.java") $(find test -name "*.java")
+  ```
+
+4) Lancer les tests
+- Windows PowerShell :
+  ```
+  $cp = "lib/junit-platform-console-standalone-1.10.2.jar"
+  java -jar $cp -cp "out;src" --scan-class-path
+  ```
+- macOS bash/zsh :
+  ```
+  cp="lib/junit-platform-console-standalone-1.10.2.jar"
+  java -jar "$cp" -cp "out:src" --scan-class-path
+  ```
+
+5) Vérifier le résultat
+- Attendu : 9 tests trouvés, 9 réussis. Un log `[SOUND] Bonus expiré` peut apparaître (provenant de SoundManager).
