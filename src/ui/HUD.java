@@ -68,7 +68,7 @@ public class HUD {
 
         // AK47 (affiché uniquement si récupéré)
         if (hasAk47) {
-            java.awt.Image akImg = src.util.SpriteLoader.load("assets/design/ak47.png");
+            java.awt.Image akImg = src.util.SpriteLoader.load("assets/items/ak47.png");
             if (akImg != null)
                 g.drawImage(akImg, xItem - iconSize, y - iconSize/2, iconSize, iconSize, null);
             xItem -= iconSize + gap;
@@ -76,19 +76,19 @@ public class HUD {
 
         // Timer
         int timerCount = (inventory != null) ? inventory.count(ItemType.TIMER) : 0;
-        java.awt.Image timerImg = src.util.SpriteLoader.load("assets/design/timer.png");
-        if (timerImg != null)
-            g.drawImage(timerImg, xItem - iconSize, y - iconSize/2, iconSize, iconSize, null);
         g.setFont(fontCounter);
         g.drawString(String.valueOf(timerCount), xItem - iconSize - 28, y + 8);
+        java.awt.Image timerImg = src.util.SpriteLoader.load("assets/items/timer.png");
+        if (timerImg != null)
+            g.drawImage(timerImg, xItem - iconSize, y - iconSize/2, iconSize, iconSize, null);
         xItem -= iconSize + gap + 32;
 
-        // Kills/skull
-        java.awt.Image skullImg = src.util.SpriteLoader.load("assets/design/skull.png");
-        if (skullImg != null)
-            g.drawImage(skullImg, xItem - iconSize, y - iconSize/2, iconSize, iconSize, null);
+        // Kills
         g.setFont(fontCounter);
         g.drawString(String.valueOf(killCount), xItem - iconSize - 28, y + 8);
+        java.awt.Image killImg = src.util.SpriteLoader.load("assets/items/kill.png");
+        if (killImg != null)
+            g.drawImage(killImg, xItem - iconSize, y - iconSize/2, iconSize, iconSize, null);
         xItem -= iconSize + gap + 32;
     }
 }
