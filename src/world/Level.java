@@ -28,7 +28,7 @@ public class Level {
     public Level() {
 
         // -------- SOL --------
-        platforms.add(new Platform(0, 685, 1280, 40));
+        platforms.add(new Platform(0, 720, 1280, 40));
 
         // -------- LEFT --------
         platforms.add(new Platform(0, 260, 280, 25));
@@ -37,14 +37,14 @@ public class Level {
 
         // -------- CENTER LEFT --------
         platforms.add(new Platform(285, 350, 200, 25));
-        platforms.add(new Platform(285, 600, 200, 25));
+        platforms.add(new Platform(285, 589, 200, 25));
 
         // -------- CENTER --------
-        platforms.add(new Platform(500, 490, 200, 25));
+        platforms.add(new Platform(500, 480, 200, 25));
 
         // -------- CENTER RIGHT --------
         platforms.add(new Platform(730, 350, 200, 25));
-        platforms.add(new Platform(730, 600, 200, 25));
+        platforms.add(new Platform(730, 590, 200, 25));
 
         // -------- RIGHT --------
         platforms.add(new Platform(980, 260, 280, 25));

@@ -35,10 +35,10 @@ public class Platform {
      * @param height Hauteur de la plateforme.
      */
     public Platform(double x, double y, double width, double height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    this.x = x;
+    this.y = y - 35;
+    this.width = width;
+    this.height = height;
     }
 
     /**
