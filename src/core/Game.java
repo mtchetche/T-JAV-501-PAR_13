@@ -551,6 +551,7 @@ public class Game {
         }
 
         if (keyboardInput.isKeyDown(KeyEvent.VK_M)) {
+            SoundManager.playMusic("game-music-loop.mp3");
             screenState = ScreenState.MAIN_MENU;
         }
     }
@@ -579,6 +580,7 @@ public class Game {
         }
 
         if (keyboardInput.isKeyDown(KeyEvent.VK_M)) {
+            SoundManager.playMusic("game-music-loop.mp3");
             screenState = ScreenState.MAIN_MENU;
         }
 
