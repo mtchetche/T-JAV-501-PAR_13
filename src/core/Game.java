@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.imageio.ImageIO;
 
 import src.entities.Enemy02;
 import src.entities.Enemy03;
@@ -86,9 +89,77 @@ public class Game {
     private double akFireCooldown = 0.0;
     private final ArrayList<Ak47Bullet> akBullets = new ArrayList<>();
 
+    // Images de fond
+    private BufferedImage imageMenuPrincipale;
+    private BufferedImage imageMurDeFond;
+
+    /**
+     * Charge les images de fond depuis le dossier assets/design/.
+     * <ul>
+     *     <li>imageMenuPrincipale : affichée au menu principal</li>
+     *     <li>imageMurDeFond : affichée pendant le gameplay</li>
+     * </ul>
+     */
+    private void loadBackgroundImages() {
+        try {
+            // Essayer différents chemins pour trouver les images
+            File imageMenu = findAssetFile("assets/design/image-menu-principale.png");
+            File imageMur = findAssetFile("assets/design/mur-de-fond.png");
+            
+            if (imageMenu != null && imageMenu.exists()) {
+                imageMenuPrincipale = ImageIO.read(imageMenu);
+                System.out.println("[GAME] Menu background loaded: " + imageMenu.getAbsolutePath());
+            }
+            
+            if (imageMur != null && imageMur.exists()) {
+                imageMurDeFond = ImageIO.read(imageMur);
+                System.out.println("[GAME] Gameplay background loaded: " + imageMur.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            System.out.println("[GAME] Erreur chargement images de fond: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Trouve un fichier asset en remontant les répertoires parents.
+     */
+    private File findAssetFile(String path) {
+        // 1. Essayer le chemin relatif simple
+        File f = new File(path);
+        if (f.exists()) return f;
+
+        // 2. Essayer en remontant les répertoires parents
+        File cwd = new File(System.getProperty("user.dir"));
+        File cur = cwd;
+        for (int i = 0; i < 6; i++) {
+            File candidate = new File(cur, path);
+            if (candidate.exists()) return candidate;
+            cur = cur.getParentFile();
+            if (cur == null) break;
+        }
+
+        // 3. Chercher en explorant le répertoire
+        try {
+            java.nio.file.Path start = cwd.toPath();
+            java.util.Optional<java.nio.file.Path> found = java.nio.file.Files.walk(start, 6)
+                    .filter(p -> p.toString().endsWith(path.replace("assets/", "")))
+                    .findFirst();
+            if (found.isPresent()) {
+                return found.get().toFile();
+            }
+        } catch (Exception ignored) { }
+
+        return null;
+    }
+
+
     public Game(KeyboardInput keyboardInput) {
         this.keyboardInput = keyboardInput;
         this.elapsedTime = 0.0;
+        
+        // Charger les images de fond
+        loadBackgroundImages();
+        
         // Lancer la musique de fond au démarrage du jeu (menu principal)
         SoundManager.playMusic("game-music-loop.mp3");
         initGame();
@@ -550,8 +621,13 @@ public class Game {
 
     private void renderMainMenu(Graphics2D g) {
 
-        g.setColor(new Color(50, 50, 50));
-        g.fillRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        // Afficher l'image de fond du menu, sinon fond gris
+        if (imageMenuPrincipale != null) {
+            g.drawImage(imageMenuPrincipale, 0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, null);
+        } else {
+            g.setColor(new Color(50, 50, 50));
+            g.fillRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        }
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Consolas", Font.BOLD, 48));
@@ -576,8 +652,13 @@ public class Game {
 
     private void renderRunning(Graphics2D g) {
 
-        g.setColor(new Color(90, 90, 90));
-        g.fillRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        // Afficher l'image de fond du gameplay, sinon fond gris
+        if (imageMurDeFond != null) {
+            g.drawImage(imageMurDeFond, 0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, null);
+        } else {
+            g.setColor(new Color(90, 90, 90));
+            g.fillRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        }
 
         // Titre + vague actuelle
         g.setColor(Color.WHITE);
