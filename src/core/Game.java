@@ -662,45 +662,24 @@ public class Game {
             g.fillRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         }
 
-        // Titre + vague actuelle
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Consolas", Font.BOLD, 24));
-        g.drawString("SYNTAX ERROR 2D – Vague " + waveManager.getCurrentWaveNumber(), 40, 60);
+    // Monde & entités
+    level.render(g);
+    waveManager.render(g);
+    projectileManager.render(g);
+    pickupManager.render(g);
+    itemPickupManager.render(g);
 
-        // Temps total
-        int sec = (int) elapsedTime;
-        int minutes = sec / 60;
-        int seconds = sec % 60;
+    for (Ak47Bullet b : akBullets) {
+        b.render(g);
+    }
 
-        g.setFont(new Font("Consolas", Font.PLAIN, 18));
-        g.drawString(String.format("Temps total : %02d:%02d", minutes, seconds), 40, 100);
+    player.render(g);
 
-        // Temps restant vague
-        double remain = waveManager.getRemainingTime();
-        int rSec = (int) remain;
-        int rMin = rSec / 60;
-        int rS = rSec % 60;
-
-        g.drawString(
-                String.format("Vague %d – Temps restant : %02d:%02d",
-                        waveManager.getCurrentWaveNumber(), rMin, rS),
-                40, 130);
-
-        // Monde & entités
-        level.render(g);
-        waveManager.render(g);
-        projectileManager.render(g);
-        pickupManager.render(g);
-        itemPickupManager.render(g);
-
-        for (Ak47Bullet b : akBullets) {
-            b.render(g);
-        }
-
-        player.render(g);
-
-        // HUD complet (kills + inventaire texte)
-        hud.render(g, killCount, inventory, player.hasAk47());
+    // HUD redesign: passer toutes les infos nécessaires
+    int waveNum = waveManager.getCurrentWaveNumber();
+    int elapsedSec = (int) elapsedTime;
+    int remainSec = (int) waveManager.getRemainingTime();
+    hud.render(g, killCount, inventory, player.hasAk47(), waveNum, elapsedSec, remainSec);
     }
 
     private void renderPauseOverlay(Graphics2D g) {

@@ -20,8 +20,9 @@ import src.core.ItemType;
  */
 public class HUD {
 
-    private final Font fontTitle = new Font("Consolas", Font.BOLD, 18);
-    private final Font fontText = new Font("Consolas", Font.PLAIN, 16);
+    private final Font fontTitle = new Font("Consolas", Font.BOLD, 28);
+    private final Font fontText = new Font("Consolas", Font.PLAIN, 20);
+    private final Font fontCounter = new Font("Consolas", Font.BOLD, 22);
 
     /**
      * Affiche l'ensemble des informations du HUD :
@@ -38,40 +39,56 @@ public class HUD {
      * @param inventory Inventaire du joueur (peut être null)
      * @param hasAk47   Indique si le joueur possède une AK47
      */
-    public void render(Graphics2D g, int killCount, Inventory inventory, boolean hasAk47) {
+    public void render(Graphics2D g, int killCount, Inventory inventory, boolean hasAk47, int waveNum, int elapsedSec, int remainSec) {
+        int margin = 32;
+        int y = 40;
+        int xLeft = margin;
+        int xRight = src.core.Constants.WINDOW_WIDTH - margin;
 
-        // Position du bloc HUD
-        int x = 20;
-        int y = 20;
-        int width = 180;
-        int height = 100;
-
-        // Fond translucide
-        g.setColor(new Color(0, 0, 0, 140)); // semi-transparent
-        g.fillRoundRect(x, y, width, height, 12, 12);
-
-        int textX = x + 12;
-        int textY = y + 28;
-
-        // --- TITRE ---
+        // --- Infos Vague & Temps (aligné à gauche) ---
         g.setColor(Color.WHITE);
         g.setFont(fontTitle);
-        g.drawString("HUD", textX, textY);
-
-        textY += 25;
+        g.drawString("VAGUE " + waveNum, xLeft, y);
 
         g.setFont(fontText);
+        int xInfo = xLeft + 170;
+        int minutes = elapsedSec / 60;
+        int seconds = elapsedSec % 60;
+        g.drawString("Temps Total : " + String.format("%02d:%02d", minutes, seconds), xInfo, y);
 
-        // --- KILLS ---
-        g.drawString("Kills : " + killCount, textX, textY);
-        textY += 22;
+        int xRemain = xInfo + 220;
+        int rMin = remainSec / 60;
+        int rS = remainSec % 60;
+        g.drawString("Temps Restant : " + String.format("%02d:%02d", rMin, rS), xRemain, y);
 
-        // --- TIMER(S) ---
+        // --- Items récupérés (aligné à droite, row) ---
+        int iconSize = 32;
+        int gap = 18;
+        int xItem = xRight;
+
+        // AK47 (affiché uniquement si récupéré)
+        if (hasAk47) {
+            java.awt.Image akImg = src.util.SpriteLoader.load("assets/design/ak47.png");
+            if (akImg != null)
+                g.drawImage(akImg, xItem - iconSize, y - iconSize/2, iconSize, iconSize, null);
+            xItem -= iconSize + gap;
+        }
+
+        // Timer
         int timerCount = (inventory != null) ? inventory.count(ItemType.TIMER) : 0;
-        g.drawString("Timer : " + timerCount, textX, textY);
-        textY += 22;
+        java.awt.Image timerImg = src.util.SpriteLoader.load("assets/design/timer.png");
+        if (timerImg != null)
+            g.drawImage(timerImg, xItem - iconSize, y - iconSize/2, iconSize, iconSize, null);
+        g.setFont(fontCounter);
+        g.drawString(String.valueOf(timerCount), xItem - iconSize - 28, y + 8);
+        xItem -= iconSize + gap + 32;
 
-        // --- AK47 ---
-        g.drawString("AK47 : " + (hasAk47 ? "Oui" : "Non"), textX, textY);
+        // Kills/skull
+        java.awt.Image skullImg = src.util.SpriteLoader.load("assets/design/skull.png");
+        if (skullImg != null)
+            g.drawImage(skullImg, xItem - iconSize, y - iconSize/2, iconSize, iconSize, null);
+        g.setFont(fontCounter);
+        g.drawString(String.valueOf(killCount), xItem - iconSize - 28, y + 8);
+        xItem -= iconSize + gap + 32;
     }
 }
