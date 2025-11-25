@@ -221,6 +221,8 @@ public class Enemy02 extends Enemy {
                     vy = jumpForce * 60;
                 }
                 break;
+            default:
+                break;
         }
     }
 

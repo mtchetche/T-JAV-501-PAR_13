@@ -29,9 +29,6 @@ public class ProjectileManager {
     /** Liste de tous les projectiles ennemis actifs dans la scène. */
     private final ArrayList<Bullet> bullets = new ArrayList<>();
 
-    /** Référence au niveau courant (utilisé éventuellement pour collisions décor). */
-    private final Level level;
-
     /** Joueur cible — utilisé pour détecter les impacts. */
     private final Player player;
 
@@ -46,7 +43,6 @@ public class ProjectileManager {
      * @param timeFreezeManager gestionnaire du gel du temps (peut être {@code null})
      */
     public ProjectileManager(Level level, Player player, TimeFreezeManager timeFreezeManager) {
-        this.level = level;
         this.player = player;
         this.timeFreezeManager = timeFreezeManager;
     }

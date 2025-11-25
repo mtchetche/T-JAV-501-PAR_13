@@ -50,9 +50,6 @@ public class Enemy01 extends Enemy {
     /** Sprites pour l’animation de marche. */
     private BufferedImage run1Sprite, run2Sprite, run3Sprite;
 
-    /** Sprite d’attaque (non utilisé dans l'état actuel du code). */
-    private BufferedImage shootSprite;
-
     /** Tableau des sprites de course, utilisé par l'animation. */
     private BufferedImage[] runSprites;
 
@@ -119,7 +116,7 @@ public class Enemy01 extends Enemy {
         run1Sprite = loadSprite("assets/enemy01/fadel-marche1.png");
         run2Sprite = loadSprite("assets/enemy01/fadel-marche2.png");
         run3Sprite = loadSprite("assets/enemy01/fadel-marche3.png");
-        shootSprite = loadSprite("assets/enemy01/fadel-attaque.png");
+        loadSprite("assets/enemy01/fadel-attaque.png");
 
         runSprites = new BufferedImage[] { run1Sprite, run2Sprite, run3Sprite };
     }
@@ -242,6 +239,8 @@ public class Enemy01 extends Enemy {
             case COOLDOWN:
                 vx = 0;
                 state = EnemyState.IDLE;
+                break;
+            default:
                 break;
         }
     }

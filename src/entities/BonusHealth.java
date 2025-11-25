@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.util.SpriteLoader;
-import src.core.Constants;
 import src.core.SoundManager;
 
 /**

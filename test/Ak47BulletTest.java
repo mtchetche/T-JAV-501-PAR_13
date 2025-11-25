@@ -1,9 +1,5 @@
-import org.junit.jupiter.api.Test;
-
 import src.core.Constants;
 import src.entities.Ak47Bullet;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class Ak47BulletTest {
 
@@ -14,5 +10,10 @@ public class Ak47BulletTest {
         bullet.update(0.5);
 
         assertFalse(bullet.isAlive());
+    }
+
+    private void assertFalse(boolean alive) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'assertFalse'");
     }
 }

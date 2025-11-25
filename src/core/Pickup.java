@@ -1,7 +1,5 @@
 package src.core;
 
-import java.awt.*;
-
 /**
  * Représente un bonus (pickup) présent sur le terrain.
  *
