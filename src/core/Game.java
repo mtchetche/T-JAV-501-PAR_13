@@ -623,33 +623,13 @@ public class Game {
 
     private void renderMainMenu(Graphics2D g) {
 
-        // Afficher l'image de fond du menu, sinon fond gris
+        // Afficher uniquement l'image de fond du menu, sinon fond gris
         if (imageMenuPrincipale != null) {
             g.drawImage(imageMenuPrincipale, 0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT, null);
         } else {
             g.setColor(new Color(50, 50, 50));
             g.fillRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         }
-
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Consolas", Font.BOLD, 48));
-        g.drawString("SYNTAX ERROR 2D",
-                Constants.WINDOW_WIDTH / 2 - 260,
-                Constants.WINDOW_HEIGHT / 2 - 100);
-
-        g.setFont(new Font("Consolas", Font.PLAIN, 20));
-        g.drawString("Prototype Vagues 1, 2 & 3",
-                Constants.WINDOW_WIDTH / 2 - 120,
-                Constants.WINDOW_HEIGHT / 2 - 60);
-
-        g.setFont(new Font("Consolas", Font.PLAIN, 22));
-        g.setColor(Color.LIGHT_GRAY);
-        g.drawString("ENTER : Jouer",
-                Constants.WINDOW_WIDTH / 2 - 80,
-                Constants.WINDOW_HEIGHT / 2 + 10);
-        g.drawString("ESC   : Quitter",
-                Constants.WINDOW_WIDTH / 2 - 85,
-                Constants.WINDOW_HEIGHT / 2 + 45);
     }
 
     private void renderRunning(Graphics2D g) {
