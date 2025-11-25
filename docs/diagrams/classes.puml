@@ -1,0 +1,125 @@
+@startuml
+' SYNTAX-ERROR 2D - High-level class diagram (PlantUML)
+skinparam classAttributeIconSize 0
+
+package "core" {
+  class Game {
+    - keyboardInput: KeyboardInput
+    - elapsedTime: double
+    - player: Player
+    - level: Level
+    - waveManager: WaveManager
+    - projectileManager: ProjectileManager
+    - pickupManager: PickupManager
+    - itemPickupManager: ItemPickupManager
+    - hud: HUD
+    + initGame()
+    + render(g)
+    + update(dt)
+  }
+
+  class GamePanel {
+    - game: Game
+    + paintComponent(g)
+  }
+
+  class GameLoop
+  class Main
+  class SoundManager
+  class Inventory
+  class TimeFreezeManager
+  class WaveManager
+  class Wave
+  class ProjectileManager
+  class PickupManager
+  class Item
+  enum ItemType
+}
+
+package "entities" {
+  class Entity {
+    - x,y,width,height
+    - vx,vy
+    + update(dt)
+    + render(g)
+  }
+
+  abstract class LivingEntity {
+    - maxHealth:int
+    - health:int
+    - damage:int
+    - moveSpeed:double
+    + takeDamage(d)
+    + heal(a)
+    + isDead():boolean
+    + getRect():Rectangle
+  }
+
+  class Player
+  abstract class Enemy
+  class Enemy01
+  class Enemy02
+  class Enemy03
+  class Bullet
+  class Ak47Bullet
+  abstract class Pickup
+  class ItemPickup
+}
+
+package "world" {
+  class Level {
+    - platforms: List<Platform>
+    - entities: List<LivingEntity>
+    + getPlatforms()
+    + getEntities()
+    + addEntity(e)
+  }
+  class Platform {
+    - x,y,width,height
+    + intersects(...)
+  }
+}
+
+package "ui" {
+  class HUD {
+    + render(g,killCount,inventory,hasAk47,waveNum,elapsed,remaining)
+  }
+}
+
+package "util" {
+  class SpriteLoader
+}
+
+' Inheritance
+LivingEntity <|-- Player
+LivingEntity <|-- Enemy
+Enemy <|-- Enemy01
+Enemy <|-- Enemy02
+Enemy <|-- Enemy03
+Entity <|-- LivingEntity
+Entity <|-- Bullet
+Bullet <|-- Ak47Bullet
+Pickup <|-- ItemPickup
+
+' Associations / Aggregations
+Game "1" o-- "1" GamePanel
+Game "1" o-- "1" HUD
+Game "1" o-- "1" Player
+Game "1" o-- "1" Level
+Game "1" o-- "1" WaveManager
+Game "1" o-- "1" ProjectileManager
+Game "1" o-- "1" PickupManager
+Game "1" o-- "1" ItemPickupManager
+Level "1" *-- "*" Platform
+Level "1" *-- "*" LivingEntity : entities
+WaveManager "1" o-- "*" Wave
+ProjectileManager "1" o-- "*" Bullet
+PickupManager "1" o-- "*" Pickup
+
+' Utilities / singletons
+Game .. SoundManager
+Game .. Inventory
+Game .. TimeFreezeManager
+Game .. SpriteLoader
+
+@enduml

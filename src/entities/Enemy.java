@@ -23,6 +23,12 @@ import java.awt.Color;
  * {@link #updateAI(double)}.</p>
  */
 public abstract class Enemy extends LivingEntity {
+    // Cooldown d'attaque pour éviter le spam
+    protected double attackCooldown = 0.0;
+    protected static final double ATTACK_DELAY = 0.7; // secondes
+
+    // Pour éviter la superposition d'ennemis
+    protected static final double MIN_DIST_BETWEEN_ENEMIES = 40.0;
 
     /**
      * Référence vers le niveau permettant l'accès aux plateformes
@@ -192,15 +198,45 @@ public abstract class Enemy extends LivingEntity {
     @Override
     public void update(double dt) {
 
+        // Mise à jour du cooldown d'attaque
+        if (attackCooldown > 0) attackCooldown -= dt;
+
+        // IA spécifique
         updateAI(dt);
 
+        // Fluidification du mouvement (interpolation)
+        double targetVx = vx;
+        vx += (targetVx - vx) * 0.2; // interpolation douce
+
         applyGravity(dt);
+
+        // Correction de la superposition d'ennemis
+        avoidOverlapWithOtherEnemies();
 
         x += vx * dt;
         resolveHorizontalCollision();
 
         y += vy * dt;
         resolveVerticalCollision();
+    }
+
+    /**
+     * Empêche les ennemis de se superposer en les repoussant légèrement.
+     */
+    protected void avoidOverlapWithOtherEnemies() {
+        if (level == null) return;
+        for (LivingEntity e : level.getEntities()) {
+            if (e != this && e instanceof Enemy) {
+                double dx = e.getCenterX() - getCenterX();
+                double dy = e.getCenterY() - getCenterY();
+                double dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < MIN_DIST_BETWEEN_ENEMIES && dist > 0.1) {
+                    double push = (MIN_DIST_BETWEEN_ENEMIES - dist) * 0.2;
+                    x -= push * dx / dist;
+                    y -= push * dy / dist;
+                }
+            }
+        }
     }
 
     /**

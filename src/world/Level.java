@@ -13,6 +13,8 @@ import java.util.ArrayList;
  * </p>
  */
 public class Level {
+    /** Liste de toutes les entités vivantes (joueur, ennemis, etc.) présentes dans le niveau. */
+    private final ArrayList<src.entities.LivingEntity> entities = new ArrayList<>();
 
     /** Liste de toutes les plateformes présentes dans le niveau. */
     private final ArrayList<Platform> platforms = new ArrayList<>();
@@ -59,6 +61,21 @@ public class Level {
      */
     public ArrayList<Platform> getPlatforms() {
         return platforms;
+    }
+
+    /** Retourne la liste des entités vivantes du niveau. */
+    public ArrayList<src.entities.LivingEntity> getEntities() {
+        return entities;
+    }
+
+    /** Ajoute une entité vivante au niveau. */
+    public void addEntity(src.entities.LivingEntity e) {
+        entities.add(e);
+    }
+
+    /** Retire une entité vivante du niveau. */
+    public void removeEntity(src.entities.LivingEntity e) {
+        entities.remove(e);
     }
 
     /**
