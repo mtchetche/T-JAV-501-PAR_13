@@ -1,6 +1,7 @@
 package src.entities;
 
 import src.core.ProjectileManager;
+import src.core.SoundManager;
 import src.world.Level;
 
 import java.awt.Color;
@@ -259,6 +260,8 @@ public class Enemy03 extends Enemy {
         projectileManager.addBullet(
                 new Bullet(ex - 5, ey - 5, dirX * 450, dirY * 450, damage, level)
         );
+        // Son d'attaque à distance (Enemy03)
+        SoundManager.playSound("shot.mp3");
     }
 
     private void chasePlayer(double dt) {

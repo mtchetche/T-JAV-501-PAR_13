@@ -42,7 +42,7 @@ public class BonusHealth extends Pickup {
      */
     @Override
     protected void onPickup(Player player) {
-        SoundManager.playSound("son bonus/bonus.wav");
+        SoundManager.playSound("bonus.wav");
         player.takeDamage(-1);
     }
 

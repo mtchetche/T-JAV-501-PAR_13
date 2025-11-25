@@ -181,6 +181,10 @@ public class Player extends LivingEntity {
         if (jumpPressed && onGround) {
             vy = jumpForce * 60;
             onGround = false;
+            // Son du saut
+            try {
+                src.core.SoundManager.playSound("jump.mp3");
+            } catch (Exception ignored) { }
         }
 
         // Attaque melee seulement si PAS d'AK47

@@ -88,6 +88,8 @@ public class ProjectileManager {
                     (int)b.getWidth(), (int)b.getHeight())) {
 
                 player.takeDamage(b.getDamage());
+                // Son lorsque le joueur est touché par un projectile ennemi
+                SoundManager.playSound("punch-ennemi.mp3");
                 b.kill();
             }
         }

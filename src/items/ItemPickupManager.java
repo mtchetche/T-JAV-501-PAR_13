@@ -7,6 +7,7 @@ import java.util.Random;
 import src.core.Constants;
 import src.core.Inventory;
 import src.core.ItemType;
+import src.core.SoundManager;
 import src.entities.Player;
 
 /**
@@ -80,10 +81,12 @@ public class ItemPickupManager {
                 if (item.getType() == ItemType.TIMER) {
                     boolean added = inventory.addItem(ItemType.TIMER);
                     if (added) {
+                        SoundManager.playSound("bonus.wav");
                         item.kill();
                     }
                 }
                 else if (item.getType() == ItemType.AK47) {
+                    SoundManager.playSound("bonus.wav");
                     player.giveAk47();
                     item.kill();
                 }

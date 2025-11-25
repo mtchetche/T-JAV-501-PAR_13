@@ -49,7 +49,7 @@ public class BonusShield extends Pickup {
      */
     @Override
     protected void onPickup(Player player) {
-        SoundManager.playSound("son bonus/bonus.wav");
+        SoundManager.playSound("bonus.wav");
         player.addShield(shieldDuration);
     }
 

@@ -89,6 +89,8 @@ public class Game {
     public Game(KeyboardInput keyboardInput) {
         this.keyboardInput = keyboardInput;
         this.elapsedTime = 0.0;
+        // Lancer la musique de fond au démarrage du jeu (menu principal)
+        SoundManager.playMusic("game-music-loop.mp3");
         initGame();
     }
 
@@ -202,6 +204,7 @@ public class Game {
         elapsedTime += dt;
 
         if (keyboardInput.isKeyDown(KeyEvent.VK_ENTER)) {
+            SoundManager.stopMusic();
             initGame();
             screenState = ScreenState.RUNNING;
         }
@@ -237,7 +240,16 @@ public class Game {
         player.update(dt);
 
         if (player.isDead()) {
-            SoundManager.playSound("sound/son dead/dead.wav");
+            // Arrêter la musique de fond puis jouer le son de mort suivi du son Game Over
+            SoundManager.stopMusic();
+            SoundManager.playSound("dead.wav");
+            // Joue le son 'game-over' après un court délai pour laisser le 'dead' se jouer
+            new Thread(() -> {
+                try {
+                    Thread.sleep(700);
+                    SoundManager.playSound("game-over.mp3");
+                } catch (InterruptedException ignored) { }
+            }).start();
             screenState = ScreenState.GAME_OVER;
             return;
         }
@@ -305,6 +317,8 @@ public class Game {
                 if (!e.isDead()
                         && b.intersects((int) e.getX(), (int) e.getY(), (int) e.getWidth(), (int) e.getHeight())) {
                     e.takeDamage(b.getDamage());
+                    // Son quand le joueur touche l'ennemi
+                    SoundManager.playSound("punch.mp3");
                     b.kill();
                     break;
                 }
@@ -317,6 +331,8 @@ public class Game {
                 if (!e.isDead()
                         && b.intersects((int) e.getX(), (int) e.getY(), (int) e.getWidth(), (int) e.getHeight())) {
                     e.takeDamage(b.getDamage());
+                    // Son quand le joueur touche l'ennemi
+                    SoundManager.playSound("punch.mp3");
                     b.kill();
                     break;
                 }
@@ -329,6 +345,8 @@ public class Game {
                 if (!e.isDead()
                         && b.intersects((int) e.getX(), (int) e.getY(), (int) e.getWidth(), (int) e.getHeight())) {
                     e.takeDamage(b.getDamage());
+                    // Son quand le joueur touche l'ennemi
+                    SoundManager.playSound("punch.mp3");
                     b.kill();
                     break;
                 }
@@ -372,6 +390,8 @@ public class Game {
 
                 e.takeDamage(player.getDamage());
                 player.markHitApplied();
+                // Son quand le joueur frappe un ennemi
+                SoundManager.playSound("punch.mp3");
 
                 if (e.isDead()) {
                     killCount++;
@@ -390,6 +410,8 @@ public class Game {
 
                     e.takeDamage(player.getDamage());
                     player.markHitApplied();
+                    // Son quand le joueur frappe un ennemi
+                    SoundManager.playSound("punch.mp3");
 
                     if (e.isDead()) {
                         killCount++;
@@ -409,6 +431,8 @@ public class Game {
 
                     e.takeDamage(player.getDamage());
                     player.markHitApplied();
+                    // Son quand le joueur frappe un ennemi
+                    SoundManager.playSound("punch.mp3");
 
                     if (e.isDead()) {
                         killCount++;

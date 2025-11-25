@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import src.world.Level;
+import src.core.SoundManager;
 
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -227,6 +228,8 @@ public class Enemy01 extends Enemy {
 
                 if (touchesPlayer()) {
                     target.takeDamage(damage);
+                    // Son d'attaque rapprochée (Enemy01)
+                    SoundManager.playSound("punch-ennemi.mp3");
                     state = EnemyState.COOLDOWN;
                     vx = 0;
                 }

@@ -48,7 +48,7 @@ public class BonusSpeed extends Pickup {
      */
     @Override
     protected void onPickup(Player player) {
-        SoundManager.playSound("son bonus/bonus.wav");
+        SoundManager.playSound("bonus.wav");
         player.addSpeedBoost(speedDuration);
     }
 
