@@ -132,10 +132,33 @@ public class WaveManager {
             updateWave3(dt);
         }
 
-        // Nettoyage des ennemis morts
-        enemies01.removeIf(e -> e == null || e.isDead());
-        enemies02.removeIf(e -> e == null || e.isDead());
-        enemies03.removeIf(e -> e == null || e.isDead());
+        // Nettoyage des ennemis morts et retrait du level
+        java.util.Iterator<Enemy01> it01 = enemies01.iterator();
+        while (it01.hasNext()) {
+            Enemy01 e = it01.next();
+            if (e == null || e.isDead()) {
+                it01.remove();
+                if (e != null) level.removeEntity(e);
+            }
+        }
+
+        java.util.Iterator<Enemy02> it02 = enemies02.iterator();
+        while (it02.hasNext()) {
+            Enemy02 e = it02.next();
+            if (e == null || e.isDead()) {
+                it02.remove();
+                if (e != null) level.removeEntity(e);
+            }
+        }
+
+        java.util.Iterator<Enemy03> it03 = enemies03.iterator();
+        while (it03.hasNext()) {
+            Enemy03 e = it03.next();
+            if (e == null || e.isDead()) {
+                it03.remove();
+                if (e != null) level.removeEntity(e);
+            }
+        }
     }
 
     // ===== VAGUE 1 ===========================================================

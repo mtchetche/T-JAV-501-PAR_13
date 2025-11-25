@@ -209,12 +209,12 @@ public class Enemy01 extends Enemy {
                 if (isPlayerInRange()) {
                     state = EnemyState.CHARGING;
                     chargeTimer = 0;
-                    vx = 0;
+                    desiredVx = 0;
                 }
                 break;
 
             case CHARGING:
-                vx = 0;
+                desiredVx = 0;
                 chargeTimer += dt;
 
                 if (chargeTimer >= chargeDuration)
@@ -223,7 +223,7 @@ public class Enemy01 extends Enemy {
                 break;
 
             case CHASING:
-                vx = direction * chargeSpeed * 60;
+                desiredVx = direction * chargeSpeed * 60;
                 attemptSmartJump();
 
                 if (touchesPlayer()) {
@@ -231,7 +231,7 @@ public class Enemy01 extends Enemy {
                     // Son d'attaque rapprochée (Enemy01)
                     SoundManager.playSound("punch-ennemi.mp3");
                     state = EnemyState.COOLDOWN;
-                    vx = 0;
+                    desiredVx = 0;
                 }
 
                 if (!isPlayerInRange())
@@ -240,7 +240,7 @@ public class Enemy01 extends Enemy {
                 break;
 
             case COOLDOWN:
-                vx = 0;
+                desiredVx = 0;
                 state = EnemyState.IDLE;
                 break;
             default:

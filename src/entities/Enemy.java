@@ -35,6 +35,8 @@ public abstract class Enemy extends LivingEntity {
      * pour la gestion des collisions.
      */
     protected Level level;
+    /** Vitesse horizontale désirée (utilisée pour interpolation / lissage). */
+    protected double desiredVx = 0.0;
 
     /**
      * Joueur ciblé par l’ennemi. Sert à orienter l'ennemi et à calculer
@@ -91,6 +93,8 @@ public abstract class Enemy extends LivingEntity {
         super(x, y, 50, 50, maxHealth, damage, moveSpeed, 0);
         this.level = level;
         this.target = target;
+        // Register this enemy in the level so global entity lists are kept in sync.
+        if (this.level != null) this.level.addEntity(this);
     }
 
     /**
@@ -131,7 +135,8 @@ public abstract class Enemy extends LivingEntity {
      * @param dt delta time
      */
     protected void moveTowardsPlayer(double dt) {
-        vx = direction * moveSpeed * 60;
+        // Set desired horizontal velocity; actual vx will be interpolated in update()
+        desiredVx = direction * moveSpeed * 60;
     }
 
     /**
@@ -204,9 +209,15 @@ public abstract class Enemy extends LivingEntity {
         // IA spécifique
         updateAI(dt);
 
-        // Fluidification du mouvement (interpolation)
-        double targetVx = vx;
-        vx += (targetVx - vx) * 0.2; // interpolation douce
+        // Fluidification du mouvement (interpolation vers la vitesse désirée)
+        double targetVx = desiredVx;
+        vx += (targetVx - vx) * 0.22; // interpolation douce
+
+        // Limiter la vitesse horizontale pour éviter des valeurs extrêmes
+        double maxHoriz = Math.max(Math.abs(moveSpeed * 60), Math.abs(desiredVx));
+        if (Math.abs(vx) > maxHoriz * 2.5) {
+            vx = Math.signum(vx) * maxHoriz * 2.5;
+        }
 
         applyGravity(dt);
 
@@ -231,9 +242,11 @@ public abstract class Enemy extends LivingEntity {
                 double dy = e.getCenterY() - getCenterY();
                 double dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < MIN_DIST_BETWEEN_ENEMIES && dist > 0.1) {
-                    double push = (MIN_DIST_BETWEEN_ENEMIES - dist) * 0.2;
-                    x -= push * dx / dist;
-                    y -= push * dy / dist;
+                    // Apply a slight velocity nudging instead of hard position shifts to be smoother
+                    double push = (MIN_DIST_BETWEEN_ENEMIES - dist) * 0.04;
+                    // nudge both horizontal and vertical velocities slightly away from the other enemy
+                    vx -= push * dx / dist;
+                    vy -= push * dy / dist;
                 }
             }
         }
